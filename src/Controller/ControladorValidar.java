@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class ControladorValidar {
 	 private Connection conexion;
-	 private int numUsuario=-1;
+	 private static int numUsuario;
 	 
 	    // Constructor que recibe una conexión a la base de datos
 	    public ControladorValidar(Connection conexion) {
@@ -26,7 +26,8 @@ public class ControladorValidar {
 
 	            // Si hay resultados, significa que la contraseña y el usuario son correctos
 	            if (rs.next()) {
-	            	this.numUsuario=rs.getInt("numero");
+		            this.numUsuario=rs.getInt("numero");
+		            System.out.println(this.numUsuario);
 	                return true;
 	            } else {
 	                // Si no hay resultados, es que no hay coincidencias
@@ -39,12 +40,11 @@ public class ControladorValidar {
 	        }
 	    }
 	    public int getNumUsuario() {
-	    	if(this.numUsuario!=-1) {
+	    	System.out.println(this.numUsuario);
 	    		return this.numUsuario;
-	    	}else {
-	    		return -1;
-	    	}
 	    }
+	    	
+	    
 	    /*EJEMPLO DE USO
 	public class Main {
     public static void main(String[] args) {

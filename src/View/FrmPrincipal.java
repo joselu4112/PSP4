@@ -61,27 +61,6 @@ public class FrmPrincipal extends JFrame {
         ControladorValidar ctrValidar = new ControladorValidar(conn);
         numAlum = ctrValidar.getNumUsuario();
         
-        Statement stmDetalle = null;
-		try {
-			stmDetalle = ConexionDB.obtenerStatementDetalle(conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        ControladorDetalle ctrDetalle = new ControladorDetalle(stmDetalle);
-        
-        panelDetalle = new PanelDetalle(ctrDetalle, numAlum);
-        
-        Statement stmResumen = null;
-		try {
-			stmResumen = ConexionDB.obtenerStatementResumen(conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        ControladorResumen ctrResumen = new ControladorResumen(stmResumen);
-        panelResumen = new PanelResumen(ctrResumen,numAlum);
-        
     
         // Añadir el panel por defecto
         contentPane.add(panelEntrar, BorderLayout.CENTER);
@@ -117,6 +96,28 @@ public class FrmPrincipal extends JFrame {
     }
 	
 	public void cambiarPanel() {
+		 Statement stmDetalle = null;
+			try {
+				stmDetalle = ConexionDB.obtenerStatementDetalle(conn);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		ControladorDetalle ctrDetalle = new ControladorDetalle(stmDetalle);
+        
+        panelDetalle = new PanelDetalle(ctrDetalle, numAlum);
+        
+        Statement stmResumen = null;
+		try {
+			stmResumen = ConexionDB.obtenerStatementResumen(conn);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        ControladorResumen ctrResumen = new ControladorResumen(stmResumen);
+        panelResumen = new PanelResumen(ctrResumen,numAlum);
+        
 		showPanel(panelResumen);
 	}
 

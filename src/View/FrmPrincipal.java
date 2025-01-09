@@ -35,8 +35,10 @@ public class FrmPrincipal extends JFrame {
         try {
             conn = ConexionDB.obtenerConexion();
         } catch (SQLException e) {
+        	System.err.println(e.getMessage());
+        	e.printStackTrace();
             JOptionPane.showMessageDialog(this, 
-                "Error al obtener la conexión con la base de datos ",
+                "Error al obtener la conexión con la base de datos "+e.getMessage(),
                 "Error de conexión",
                 JOptionPane.ERROR_MESSAGE);
         }

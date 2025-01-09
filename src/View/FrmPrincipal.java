@@ -58,10 +58,6 @@ public class FrmPrincipal extends JFrame {
         // Inicializar paneles
         panelEntrar = new PanelEntrar(conn, this);
         
-        ControladorValidar ctrValidar = new ControladorValidar(conn);
-        numAlum = ctrValidar.getNumUsuario();
-        
-    
         // Añadir el panel por defecto
         contentPane.add(panelEntrar, BorderLayout.CENTER);
         
@@ -96,6 +92,9 @@ public class FrmPrincipal extends JFrame {
     }
 	
 	public void cambiarPanel() {
+		ControladorValidar ctrValidar = new ControladorValidar(conn);
+		numAlum = ctrValidar.getNumUsuario();
+		
 		 Statement stmDetalle = null;
 			try {
 				stmDetalle = ConexionDB.obtenerStatementDetalle(conn);

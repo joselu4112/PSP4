@@ -141,6 +141,7 @@ public class FrmPrincipal extends JFrame {
                 "Información", 
                 JOptionPane.INFORMATION_MESSAGE);
             menuBar.desactivarMenu();
+            showPanel(panelEntrar);
         }
     }
 }

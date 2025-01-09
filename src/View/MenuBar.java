@@ -11,7 +11,7 @@ public class MenuBar extends JMenuBar {
     private JMenu visualizarItem;
     public JMenuItem detalleItem;
     public JMenuItem resumenItem;
-    JMenu acercaDeItem;
+    public JMenuItem acercaDeItem; // Cambiado de JMenu a JMenuItem
 
     public MenuBar() {
         // Menú Validar
@@ -35,8 +35,8 @@ public class MenuBar extends JMenuBar {
         visualizarItem.add(resumenItem);
 
         // Menú Acerca de
-        acercaDeItem = new JMenu("Acerca de");
-        add(acercaDeItem);
+        acercaDeItem = new JMenuItem("Acerca de"); // Crear como JMenuItem
+        add(acercaDeItem); // Añadirlo directamente a la barra de menú
 
         desactivarMenu();
     }
@@ -57,4 +57,5 @@ public class MenuBar extends JMenuBar {
         entrarItem.setEnabled(true);
     }
 }
+
 

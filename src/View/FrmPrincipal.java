@@ -17,11 +17,11 @@ import Controller.ControladorValidar;
 
 public class FrmPrincipal extends JFrame {
 
-	private static final long serialVersionUID = 1L;
-	
-	public PanelEntrar panelEntrar;
-	public PanelDetalle panelDetalle;
-	public PanelResumen panelResumen;
+    private static final long serialVersionUID = 1L;
+    
+    public PanelEntrar panelEntrar;
+    public PanelDetalle panelDetalle;
+    public PanelResumen panelResumen;
 
     private MenuBar menuBar;
     private JPanel contentPane;
@@ -32,14 +32,15 @@ public class FrmPrincipal extends JFrame {
     
 
     public FrmPrincipal() {
-    	
-    	try {
-			conn =ConexionDB.obtenerConexion();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
+        try {
+            conn = ConexionDB.obtenerConexion();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al obtener la conexión con la base de datos ",
+                "Error de conexión",
+                JOptionPane.ERROR_MESSAGE);
+        }
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(240, 240, 450, 300);
         setResizable(false);
@@ -61,18 +62,19 @@ public class FrmPrincipal extends JFrame {
         ControladorValidar ctrValidar = new ControladorValidar(conn);
         numAlum = ctrValidar.getNumUsuario();
         
-    
         // Añadir el panel por defecto
         contentPane.add(panelEntrar, BorderLayout.CENTER);
         
         initListeners();
         
-        try {
-			ConexionDB.cerrarConexion(conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//        try {
+//            ConexionDB.cerrarConexion(conn);
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(this, 
+//                "Error al cerrar la conexión con la base de datos",
+//                "Error de conexión",
+//                JOptionPane.ERROR_MESSAGE);
+//        }
         
         setVisible(true);
     }
@@ -88,40 +90,43 @@ public class FrmPrincipal extends JFrame {
         });
     }
     
-	private void showPanel(JPanel panel) {
+    private void showPanel(JPanel panel) {
         contentPane.removeAll();
         contentPane.add(panel, BorderLayout.CENTER);
         contentPane.revalidate();
         contentPane.repaint();
     }
-	
-	public void cambiarPanel() {
-		 Statement stmDetalle = null;
-			try {
-				stmDetalle = ConexionDB.obtenerStatementDetalle(conn);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		ControladorDetalle ctrDetalle = new ControladorDetalle(stmDetalle);
+    
+    public void cambiarPanel() {
+        Statement stmDetalle = null;
+        try {
+            stmDetalle = ConexionDB.obtenerStatementDetalle(conn);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error de conexión con la base de datos",
+                "Error de conexión",
+                JOptionPane.ERROR_MESSAGE);
+        }
         
+        ControladorDetalle ctrDetalle = new ControladorDetalle(stmDetalle);
         panelDetalle = new PanelDetalle(ctrDetalle, numAlum);
         
         Statement stmResumen = null;
-		try {
-			stmResumen = ConexionDB.obtenerStatementResumen(conn);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        ControladorResumen ctrResumen = new ControladorResumen(stmResumen);
-        panelResumen = new PanelResumen(ctrResumen,numAlum);
+        try {
+            stmResumen = ConexionDB.obtenerStatementResumen(conn);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, 
+            	"Error de conexión con la base de datos",
+                "Error de conexión",
+                JOptionPane.ERROR_MESSAGE);
+        }
         
-		showPanel(panelResumen);
-	}
+        ControladorResumen ctrResumen = new ControladorResumen(stmResumen);
+        panelResumen = new PanelResumen(ctrResumen, numAlum);
+        
+        showPanel(panelResumen);
+    }
 
-    
     private void cerrarSesion() {
         int opcion = JOptionPane.showConfirmDialog(
                 this,
@@ -131,11 +136,11 @@ public class FrmPrincipal extends JFrame {
         );
 
         if (opcion == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Sesión cerrada.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Sesión cerrada.", 
+                "Información", 
+                JOptionPane.INFORMATION_MESSAGE);
             menuBar.desactivarMenu();
         }
     }
-
-
-
 }

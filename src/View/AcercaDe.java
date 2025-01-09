@@ -27,7 +27,7 @@ public class AcercaDe extends JDialog {
                 "<html><center>" +
                 "<h2>Portal de Calificaciones</h2>" +
                 "<p>Versión: 1.0</p>" +
-                "<p>Autor: Juan Pérez</p>" +
+                "<p>Autores: José Luis Carmona y Alicia Martínez</p>" +
                 "<p>Fecha: Enero 2025</p>" +
                 "</center></html>"
         );

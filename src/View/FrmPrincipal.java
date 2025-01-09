@@ -23,7 +23,7 @@ public class FrmPrincipal extends JFrame {
     public PanelDetalle panelDetalle;
     public PanelResumen panelResumen;
 
-    private MenuBar menuBar;
+    public MenuBar menuBar;
     private JPanel contentPane;
     
     private Connection conn;
@@ -144,6 +144,7 @@ public class FrmPrincipal extends JFrame {
                 "Información", 
                 JOptionPane.INFORMATION_MESSAGE);
             menuBar.desactivarMenu();
+            showPanel(panelEntrar);
         }
     }
 }

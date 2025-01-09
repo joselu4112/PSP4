@@ -92,15 +92,14 @@ public class PanelEntrar extends JPanel {
 
             if (esValido) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                menuBar.activarMenu();
+                frmPrincipal.menuBar.activarMenu();
                 frmPrincipal.cambiarPanel(); 
                 
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al validar las credenciales: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al validar las credenciales " , "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

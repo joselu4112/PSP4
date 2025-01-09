@@ -1,7 +1,6 @@
 package View;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.Dimension;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,9 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import Controller.ControladorDetalle;
 import Model.Asignatura;
 import Model.NotaInvalidaException;
-import Controller.ControladorDetalle;
 
 public class PanelDetalle extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -28,32 +28,39 @@ public class PanelDetalle extends JPanel {
     public PanelDetalle(ControladorDetalle controlador, int aluNumero) {
         this.controlador = controlador;
 
-        setLayout(new BorderLayout());
+        // Definir tamaño del panel
+        setPreferredSize(new Dimension(500, 300));
+        setLayout(null); // Absolute layout
 
-        // Panel superior para mostrar detalles
-        JPanel panelDetalles = new JPanel(new GridLayout(2, 2));
+        // Etiqueta Nombre
         lblNombre = new JLabel("Nombre:");
+        lblNombre.setBounds(20, 20, 200, 30); // Posición y tamaño
+        add(lblNombre);
+
+        // Etiqueta Nota
         lblNota = new JLabel("Nota:");
+        lblNota.setBounds(20, 70, 200, 30);
+        add(lblNota);
+
+        // Campo de texto para Nota
         txtNota = new JTextField();
+        txtNota.setBounds(80, 70, 100, 30);
+        add(txtNota);
 
-        panelDetalles.add(lblNombre);
-        panelDetalles.add(new JLabel()); // Placeholder
-        panelDetalles.add(lblNota);
-        panelDetalles.add(txtNota);
-
-        add(panelDetalles, BorderLayout.CENTER);
-
-        // Panel inferior para botones
-        JPanel panelBotones = new JPanel();
+        // Botón Guardar
         btnGuardar = new JButton("Guardar");
+        btnGuardar.setBounds(200, 200, 100, 30);
+        add(btnGuardar);
+
+        // Botón Anterior
         btnAnterior = new JButton("Anterior");
+        btnAnterior.setBounds(80, 200, 100, 30);
+        add(btnAnterior);
+
+        // Botón Siguiente
         btnSiguiente = new JButton("Siguiente");
-
-        panelBotones.add(btnAnterior);
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnSiguiente);
-
-        add(panelBotones, BorderLayout.SOUTH);
+        btnSiguiente.setBounds(320, 200, 100, 30);
+        add(btnSiguiente);
 
         // Cargar asignaturas del alumno
         cargarAsignaturas(aluNumero);
@@ -111,12 +118,11 @@ public class PanelDetalle extends JPanel {
 
             Asignatura asignatura = asignaturas.get(currentIndex);
             try {
-				asignatura.setNota(nuevaNota);
-			} catch (NotaInvalidaException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} // Actualizar la nota en el objeto
-            controlador.actualizarNota(asignatura); // Guardar en la BD
+                asignatura.setNota(nuevaNota);
+            } catch (NotaInvalidaException e) {
+                e.printStackTrace();
+            }
+            controlador.actualizarNota(asignatura);
 
             JOptionPane.showMessageDialog(this, "Nota actualizada con éxito.", "Información", JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException e) {
@@ -126,5 +132,4 @@ public class PanelDetalle extends JPanel {
         }
     }
 }
-
 

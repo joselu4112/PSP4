@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,9 +23,13 @@ public class PanelEntrar extends JPanel {
 
     private ControladorValidar controlador;
     private MenuBar menuBar;
+    
+    private FrmPrincipal frmPrincipal;
 
-    public PanelEntrar(Connection conexion) {
+
+    public PanelEntrar(Connection conexion, FrmPrincipal frmPrincipal) {
         this.controlador = new ControladorValidar(conexion);
+        this.frmPrincipal = frmPrincipal;
         menuBar = new MenuBar();
         setLayout(null);
 
@@ -88,6 +93,7 @@ public class PanelEntrar extends JPanel {
             if (esValido) {
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 menuBar.activarMenu();
+                frmPrincipal.cambiarPanel(); 
                 
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -97,6 +103,7 @@ public class PanelEntrar extends JPanel {
             e.printStackTrace();
         }
     }
+
 
     private void limpiarCampos() {
         usuarioField.setText("");

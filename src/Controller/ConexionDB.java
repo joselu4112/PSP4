@@ -5,7 +5,7 @@ import java.sql.*;
 //11.1
 public class ConexionDB {
 
-	private static final String URL = "jdbc:mysql://localhost:3306/alumnosDB";
+	private static final String URL = "jdbc:mysql://localhost:3308/alumnosDB";
     private static final String USER = "root";  // 
     private static final String PASSWORD = "";  // 
     

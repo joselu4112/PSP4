@@ -27,7 +27,6 @@ public class ControladorValidar {
 	            // Si hay resultados, significa que la contraseña y el usuario son correctos
 	            if (rs.next()) {
 		            this.numUsuario=rs.getInt("numero");
-		            System.out.println(this.numUsuario);
 	                return true;
 	            } else {
 	                // Si no hay resultados, es que no hay coincidencias
@@ -39,7 +38,6 @@ public class ControladorValidar {
 	        }
 	    }
 	    public int getNumUsuario() {
-	    	System.out.println(this.numUsuario);
 	    		return this.numUsuario;
 	    }
 	    	

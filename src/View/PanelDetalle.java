@@ -82,7 +82,10 @@ public class PanelDetalle extends JPanel {
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar asignaturas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
+        } catch (NotaInvalidaException e) {
+			//Generar mensaje error
+        	JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
     }
 
     private void mostrarAsignatura(Asignatura asignatura) {

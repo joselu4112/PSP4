@@ -143,16 +143,9 @@ public class PanelResumen extends JPanel {
 
     private void cargarImagenPorDefecto() {
         try {
-            String rutaImagenPorDefecto = "C:\\usuario.jpg";
-            File archivoImagen = new File(rutaImagenPorDefecto);
 
-            if (archivoImagen.exists()) {
-                ImageIcon icon = new ImageIcon(rutaImagenPorDefecto);
-                Image scaledImage = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-                lblImagen.setIcon(new ImageIcon(scaledImage));
-            } else {
-                lblImagen.setText("No hay imagen");
-            }
+        	lblImagen.setText("Pulsa para añadir imagen");
+            
         } catch (Exception ex) {
             lblImagen.setText("No hay imagen");
         }
@@ -189,7 +182,7 @@ public class PanelResumen extends JPanel {
     }
 
 
-    private void cargarAsignaturas() {
+    void cargarAsignaturas() {
         try {
             List<Asignatura> asignaturas = controlador.obtenerAsignaturasDeAlumno(aluNumero);
             tableModel.setRowCount(0); // Limpiar tabla

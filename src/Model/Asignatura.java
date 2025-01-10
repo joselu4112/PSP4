@@ -36,7 +36,7 @@ public class Asignatura {
 			return nota;
 		}
 		public void setNota(float nota) throws NotaInvalidaException {
-			if(0<nota && nota<10) {
+			if(0<=nota && nota<=10) {
 				this.nota = nota;
 			}else {
 				throw new NotaInvalidaException();

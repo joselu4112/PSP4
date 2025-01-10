@@ -17,22 +17,19 @@ public class ControladorDetalle {
     }
 
     // Método para obtener todas las asignaturas de un alumno
-    public List<Asignatura> obtenerAsignaturasDeAlumno(int aluNumero) throws SQLException {
+    public List<Asignatura> obtenerAsignaturasDeAlumno(int aluNumero) throws SQLException, NotaInvalidaException {
         List<Asignatura> asignaturas = new ArrayList<>();
         String query = "SELECT * FROM asignatura WHERE aluNumero = " + aluNumero;
         ResultSet rs = stmt.executeQuery(query);
         
         while (rs.next()) {
-            try {
 				asignaturas.add(new Asignatura(
 				    rs.getInt("codigo"),
 				    rs.getString("nombre"),
 				    rs.getFloat("nota"),
 				    rs.getInt("aluNumero")
 				));
-			} catch (NotaInvalidaException e) {		
-				//e.printStackTrace();
-			}
+		
         }
         rs.first();
         return asignaturas;

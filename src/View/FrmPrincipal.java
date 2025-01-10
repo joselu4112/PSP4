@@ -83,7 +83,10 @@ public class FrmPrincipal extends JFrame {
         menuBar.entrarItem.addActionListener(e -> showPanel(panelEntrar));
         menuBar.salirItem.addActionListener(e -> cerrarSesion());
         menuBar.detalleItem.addActionListener(e -> showPanel(panelDetalle));
-        menuBar.resumenItem.addActionListener(e -> showPanel(panelResumen));
+        menuBar.resumenItem.addActionListener(e -> {
+        	showPanel(panelResumen);
+        	panelResumen.cargarAsignaturas();
+        });
         menuBar.acercaDeItem.addActionListener(e -> {
             AcercaDe acercaDeDialog = new AcercaDe(this);
             acercaDeDialog.setVisible(true);

@@ -110,7 +110,6 @@ public class PanelDetalle extends JPanel {
             JOptionPane.showMessageDialog(this, "No hay más asignaturas.", "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-
     private void guardarNota() {
         try {
             float nuevaNota = Float.parseFloat(txtNota.getText().trim());

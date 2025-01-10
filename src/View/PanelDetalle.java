@@ -19,7 +19,7 @@ public class PanelDetalle extends JPanel {
 
     private JLabel lblNombre, lblNota;
     private JTextField txtNota;
-    private JButton btnGuardar, btnAnterior, btnSiguiente;
+    private JButton btnGuardar, btnAnterior, btnSiguiente, btnPrimero, btnUltimo;
 
     private ControladorDetalle controlador;
     private List<Asignatura> asignaturas;
@@ -62,12 +62,24 @@ public class PanelDetalle extends JPanel {
         btnSiguiente.setBounds(320, 200, 100, 30);
         add(btnSiguiente);
 
+        // Botón Primero
+        btnPrimero = new JButton("Primero");
+        btnPrimero.setBounds(80, 230, 100, 30);
+        add(btnPrimero);
+
+        // Botón Último
+        btnUltimo = new JButton("Último");
+        btnUltimo.setBounds(320, 230, 100, 30);
+        add(btnUltimo);
+
         // Cargar asignaturas del alumno
         cargarAsignaturas(aluNumero);
 
         // Listeners de los botones
         btnAnterior.addActionListener(e -> mostrarAsignaturaAnterior());
         btnSiguiente.addActionListener(e -> mostrarAsignaturaSiguiente());
+        btnPrimero.addActionListener(e -> mostrarPrimeraAsignatura());
+        btnUltimo.addActionListener(e -> mostrarUltimaAsignatura());
         btnGuardar.addActionListener(e -> guardarNota());
     }
 
@@ -83,9 +95,8 @@ public class PanelDetalle extends JPanel {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar asignaturas: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (NotaInvalidaException e) {
-			//Generar mensaje error
-        	JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void mostrarAsignatura(Asignatura asignatura) {
@@ -110,20 +121,32 @@ public class PanelDetalle extends JPanel {
             JOptionPane.showMessageDialog(this, "No hay más asignaturas.", "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+
+    private void mostrarPrimeraAsignatura() {
+        if (!asignaturas.isEmpty()) {
+            currentIndex = 0;
+            mostrarAsignatura(asignaturas.get(currentIndex));
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay asignaturas para mostrar.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void mostrarUltimaAsignatura() {
+        if (!asignaturas.isEmpty()) {
+            currentIndex = asignaturas.size() - 1;
+            mostrarAsignatura(asignaturas.get(currentIndex));
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay asignaturas para mostrar.", "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
     private void guardarNota() {
         try {
             float nuevaNota = Float.parseFloat(txtNota.getText().trim());
-            if (nuevaNota < 0 || nuevaNota > 10) {
-                JOptionPane.showMessageDialog(this, "La nota debe estar entre 0 y 10.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
+          
             Asignatura asignatura = asignaturas.get(currentIndex);
-            try {
-                asignatura.setNota(nuevaNota);
-            } catch (NotaInvalidaException e) {
-                e.printStackTrace();
-            }
+            asignatura.setNota(nuevaNota);
             controlador.actualizarNota(asignatura);
 
             JOptionPane.showMessageDialog(this, "Nota actualizada con éxito.", "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -131,7 +154,10 @@ public class PanelDetalle extends JPanel {
             JOptionPane.showMessageDialog(this, "Ingrese una nota válida.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al actualizar la nota: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NotaInvalidaException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
+
 

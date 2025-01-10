@@ -4,11 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -18,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import Controller.ControladorImagen;
 import Controller.ControladorResumen;
 import Model.Alumno;
 import Model.Asignatura;
@@ -33,15 +41,21 @@ public class PanelResumen extends JPanel {
     private DefaultTableModel tableModel;
     private JButton btnCalcular;
     private int aluNumero;
+    private Connection conn;
 
-    public PanelResumen(ControladorResumen controlador, int aluNumero) {
+    public PanelResumen(Connection conn, ControladorResumen controlador, int aluNumero) {
         this.controlador = controlador;
         this.aluNumero = aluNumero;
+        this.conn = conn;
 
         setLayout(new BorderLayout());
+        initComponents();
+        cargarDatos();
+    }
 
-        JPanel panelSuperior = new JPanel();
-        panelSuperior.setLayout(new BorderLayout());
+    private void initComponents() {
+        // Panel superior
+        JPanel panelSuperior = new JPanel(new BorderLayout());
         JPanel panelDatos = new JPanel(new GridLayout(2, 2));
 
         JLabel lblUsuario = new JLabel("Usuario:");
@@ -64,28 +78,27 @@ public class PanelResumen extends JPanel {
         panelSuperior.add(panelDatos, BorderLayout.CENTER);
         panelSuperior.add(lblImagen, BorderLayout.EAST);
 
-        // Configurar JTable
+        // Tabla
         tableModel = new DefaultTableModel(new String[]{"Nombre", "Nota"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // No editable
+                return false;
             }
         };
         tableAsignaturas = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(tableAsignaturas);
 
-        // Botón Calcular
+        // Botón calcular
         btnCalcular = new JButton("Calcular");
         btnCalcular.addActionListener(e -> calcularNotaMedia());
 
         JPanel panelInferior = new JPanel();
         panelInferior.add(btnCalcular);
 
+        // Añadir paneles
         add(panelSuperior, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(panelInferior, BorderLayout.SOUTH);
-
-        cargarDatos();
     }
 
     private void cargarDatos() {
@@ -95,21 +108,86 @@ public class PanelResumen extends JPanel {
                 txtUsuario.setText(alumno.getUsuario());
                 txtNotaMedia.setText(String.valueOf(alumno.getNotaMedia()));
 
-                // Mostrar imagen si existe
+                // Manejo de imagen
                 if (alumno.getImagen() != null) {
-                    ImageIcon icon = new ImageIcon(alumno.getImagen().getBytes(1, (int) alumno.getImagen().length()));
-                    Image scaledImage = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-                    lblImagen.setIcon(new ImageIcon(scaledImage));
+                    mostrarImagen(alumno.getImagen());
                 } else {
-                    lblImagen.setIcon(null);
+                    cargarImagenPorDefecto();
                 }
 
+                lblImagen.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        cambiarImagenAlumno();
+                    }
+                });
+
                 cargarAsignaturas();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se encontró el alumno.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al cargar datos del alumno: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    private void mostrarImagen(Blob imagenBlob) {
+        try {
+            ImageIcon icon = new ImageIcon(imagenBlob.getBytes(1, (int) imagenBlob.length()));
+            Image scaledImage = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            lblImagen.setIcon(new ImageIcon(scaledImage));
+        } catch (SQLException ex) {
+            cargarImagenPorDefecto();
+        }
+    }
+
+    private void cargarImagenPorDefecto() {
+        try {
+            String rutaImagenPorDefecto = "C:\\usuario.jpg";
+            File archivoImagen = new File(rutaImagenPorDefecto);
+
+            if (archivoImagen.exists()) {
+                ImageIcon icon = new ImageIcon(rutaImagenPorDefecto);
+                Image scaledImage = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+                lblImagen.setIcon(new ImageIcon(scaledImage));
+            } else {
+                lblImagen.setText("No hay imagen");
+            }
+        } catch (Exception ex) {
+            lblImagen.setText("No hay imagen");
+        }
+    }
+
+    private void cambiarImagenAlumno() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes JPG", "jpg"));
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File archivoSeleccionado = fileChooser.getSelectedFile();
+
+            if (archivoSeleccionado != null && archivoSeleccionado.exists()) {
+                try {
+                    // Usar ControladorImagen para convertir y guardar la imagen en la base de datos
+                    ControladorImagen.actualizarImagenAlumno(aluNumero, archivoSeleccionado, conn);
+
+                    // Recuperar la nueva imagen para mostrarla
+                    Blob nuevaImagen = ControladorImagen.obtenerImagenAlumno(aluNumero, conn);
+                    alumno.setImagen(nuevaImagen);
+
+                    // Mostrar la nueva imagen en el JLabel
+                    mostrarImagen(nuevaImagen);
+
+                    JOptionPane.showMessageDialog(this, "Imagen actualizada correctamente y guardada en la base de datos.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Error al actualizar la imagen: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Archivo no válido o inexistente.", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
 
     private void cargarAsignaturas() {
         try {

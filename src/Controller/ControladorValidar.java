@@ -34,7 +34,6 @@ public class ControladorValidar {
 	                return false;
 	            }
 	        } catch (SQLException e) {
-	            // Manejo de errores si ocurre alguna excepción al ejecutar la consulta
 	            e.printStackTrace();
 	            return false;
 	        }
@@ -45,26 +44,5 @@ public class ControladorValidar {
 	    }
 	    	
 	    
-	    /*EJEMPLO DE USO
-	public class Main {
-    public static void main(String[] args) {
-        // Establecer la conexión con la base de datos
-        try (Connection conexion = ConexionDB.obtenerConexion() {
-            // Crear el controlador
-            ControladorValidar controlador = new ControladorValidar(conexion);
-
-            // Validar el usuario y la contraseña
-            String usuario = "usuarioEjemplo";
-            String contrasena = "contrasenaEjemplo";
-
-            if (controlador.validarUsuario(usuario, contrasena)) {
-                System.out.println("¡Usuario y contraseña válidos!");
-            } else {
-                System.out.println("Usuario o contraseña incorrectos.");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }*/
+	    
 }

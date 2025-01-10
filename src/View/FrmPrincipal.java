@@ -125,7 +125,7 @@ public class FrmPrincipal extends JFrame {
         }
         
         ControladorResumen ctrResumen = new ControladorResumen(stmResumen);
-        panelResumen = new PanelResumen(ctrResumen, numAlum);
+        panelResumen = new PanelResumen(conn,ctrResumen, numAlum);
         
         showPanel(panelResumen);
     }

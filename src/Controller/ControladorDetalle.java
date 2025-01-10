@@ -7,7 +7,7 @@ import java.util.List;
 import Model.Asignatura;
 import Model.NotaInvalidaException;
 
-//11.2
+
 public class ControladorDetalle {
 	private Statement stmt;
 
@@ -30,9 +30,8 @@ public class ControladorDetalle {
 				    rs.getFloat("nota"),
 				    rs.getInt("aluNumero")
 				));
-			} catch (NotaInvalidaException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (NotaInvalidaException e) {		
+				//e.printStackTrace();
 			}
         }
         rs.first();
